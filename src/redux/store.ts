@@ -1,12 +1,14 @@
-import { combineReducers, createStore } from "redux";
-import { contactsReducer } from "./contactsReducer";
+import { applyMiddleware, combineReducers, createStore } from "redux";
 import { composeWithDevTools } from "@redux-devtools/extension";
+import { thunk } from "redux-thunk";
+import { contactsReducer } from "./contactsReducer";
 
 export const store = createStore(
   combineReducers({
     contacts: contactsReducer,
   }),
-  composeWithDevTools()
+  undefined,
+  composeWithDevTools(applyMiddleware(thunk))
 );
 
 export type RootState = ReturnType<typeof store.getState>;
