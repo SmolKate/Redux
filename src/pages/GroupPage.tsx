@@ -1,31 +1,27 @@
-import React, {memo, useEffect, useState} from 'react';
-import {CommonPageProps} from './types';
-import {Col, Row} from 'react-bootstrap';
-import {useParams} from 'react-router-dom';
-import {ContactDto} from 'src/types/dto/ContactDto';
-import {GroupContactsDto} from 'src/types/dto/GroupContactsDto';
-import {GroupContactsCard} from 'src/components/GroupContactsCard';
-import {Empty} from 'src/components/Empty';
-import {ContactCard} from 'src/components/ContactCard';
+import { memo } from "react";
+import { Col, Row } from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import { GroupContactsCard } from "src/components/GroupContactsCard";
+import { Empty } from "src/components/Empty";
+import { ContactCard } from "src/components/ContactCard";
+import { useAppSelector } from "src/redux/hooks";
 
-export const GroupPage = memo<CommonPageProps>(({
-  contactsState,
-  groupContactsState
-}) => {
-  const {groupId} = useParams<{ groupId: string }>();
-  const [contacts, setContacts] = useState<ContactDto[]>([]);
-  const [groupContacts, setGroupContacts] = useState<GroupContactsDto>();
-
-  useEffect(() => {
-    const findGroup = groupContactsState[0].find(({id}) => id === groupId);
-    setGroupContacts(findGroup);
-    setContacts(() => {
-      if (findGroup) {
-        return contactsState[0].filter(({id}) => findGroup.contactIds.includes(id))
-      }
-      return [];
-    });
-  }, [groupId]);
+export const GroupPage = memo(() => {
+  const { groupId } = useParams<{ groupId: string }>();
+  const groupContacts = useAppSelector((state) =>
+    state.contacts.groupContacts.find(({ id }) => id === groupId)
+  );
+  const contacts = useAppSelector((state) => {
+    const findGroup = state.contacts.groupContacts.find(
+      ({ id }) => id === groupId
+    );
+    if (findGroup) {
+      return state.contacts.contacts.filter(({ id }) =>
+        findGroup.contactIds.includes(id)
+      );
+    }
+    return [];
+  });
 
   return (
     <Row className="g-4">
@@ -48,7 +44,9 @@ export const GroupPage = memo<CommonPageProps>(({
             </Row>
           </Col>
         </>
-      ) : <Empty />}
+      ) : (
+        <Empty />
+      )}
     </Row>
   );
 });
