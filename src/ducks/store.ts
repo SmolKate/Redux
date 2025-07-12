@@ -1,17 +1,20 @@
 import { combineReducers } from "redux";
-// import { contactsReducer } from "./contactsReducer";
-import { contactsReducer } from "./contacts";
 import { configureStore } from "@reduxjs/toolkit";
+import {
+  contactsMiddleware,
+  contactsReducer,
+  contactsReducerPath,
+} from "./contacts";
 
 const rootReducer = combineReducers({
-  contacts: contactsReducer,
+  [contactsReducerPath]: contactsReducer,
 });
 
 export const store = configureStore({
   reducer: rootReducer,
   devTools: true,
   middleware(getDefaultMiddleware) {
-    return getDefaultMiddleware();
+    return getDefaultMiddleware().concat(contactsMiddleware);
   },
 });
 

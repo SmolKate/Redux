@@ -1,12 +1,10 @@
 import { memo } from "react";
 import { Col, Row } from "react-bootstrap";
 import { GroupContactsCard } from "../components/GroupContactsCard";
-import { useAppSelector } from "../ducks/hooks";
+import { useGetContactsGroupsQuery } from "../ducks/contacts";
 
 export const GroupListPage = memo(() => {
-  const groupContactsList = useAppSelector(
-    (state) => state.contacts.groupContacts
-  );
+  const { data: groupContactsList } = useGetContactsGroupsQuery();
 
   return (
     <Row xxl={4}>

@@ -2,14 +2,15 @@ import { memo, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { ContactCard } from "../components/ContactCard";
 import { FilterForm, FilterFormValues } from "../components/FilterForm";
-import { useAppSelector } from "../ducks/hooks";
 import { ContactDto } from "../types/dto/ContactDto";
+import {
+  useGetContactsQuery,
+  useGetContactsGroupsQuery,
+} from "../ducks/contacts";
 
 export const ContactListPage = memo(() => {
-  const contacts = useAppSelector((state) => state.contacts.contacts);
-  const groupContactsList = useAppSelector(
-    (state) => state.contacts.groupContacts
-  );
+  const { data: contacts } = useGetContactsQuery();
+  const { data: groupContactsList } = useGetContactsGroupsQuery();
 
   const [contactsList, setContactsList] = useState<ContactDto[] | undefined>();
 

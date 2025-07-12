@@ -1,46 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { contactsGroups, contactsList } from "./thunks";
-import { ContactDto } from "src/types/dto/ContactDto";
-import { FavoriteContactsDto } from "src/types/dto/FavoriteContactsDto";
-import { GroupContactsDto } from "src/types/dto/GroupContactsDto";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { ContactDto } from "../../types/dto/ContactDto";
+import { GroupContactsDto } from "../../types/dto/GroupContactsDto";
 
-interface InitialState {
-  contacts?: ContactDto[];
-  favoriteContacts?: FavoriteContactsDto;
-  groupContacts?: GroupContactsDto[];
-  isError: boolean;
-}
-
-const initialState: InitialState = {
-  contacts: [],
-  favoriteContacts: [],
-  groupContacts: [],
-  isError: false,
-};
-
-export const contactsSlice = createSlice({
-  name: "contacts",
-  initialState,
-  reducers: {},
-  extraReducers(builder) {
-    builder.addMatcher(contactsList.fulfilled.match, (state, action) => {
-      const favoriteContacts = action.payload
-        .slice(0, 4)
-        .map((contact) => contact.id);
-      state.contacts = action.payload;
-      state.favoriteContacts = favoriteContacts;
-      state.isError = false;
-    });
-    builder.addMatcher(contactsList.rejected.match, (state) => {
-      state.isError = true;
-    });
-
-    builder.addMatcher(contactsGroups.fulfilled.match, (state, action) => {
-      state.groupContacts = action.payload;
-      state.isError = false;
-    });
-    builder.addMatcher(contactsGroups.rejected.match, (state) => {
-      state.isError = true;
-    });
-  },
+export const contactsApi = createApi({
+  reducerPath: "contacts",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "https://fs.gcfiles.net/fileservice/file/download/a/177331/sc",
+  }),
+  endpoints: (builder) => ({
+    getContacts: builder.query<ContactDto[], void>({
+      query() {
+        return {
+          url: "/280/h/3f9021c6ea91fc0306ceb0e9c2f2e56c.json",
+        };
+      },
+    }),
+    getContactsGroups: builder.query<GroupContactsDto[], void>({
+      query() {
+        return {
+          url: "/398/h/e6c614d4c59fd9b546fb5abdfb456dd5.json",
+        };
+      },
+    }),
+  }),
 });
