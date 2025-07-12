@@ -1,10 +1,10 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { UnknownAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
-import { ContactsAction } from "src/redux/actions";
-import { RootState } from "src/redux/store";
+import { RootState } from "src/ducks/store";
 
 export const useAppDispatch = useDispatch<
-  ThunkDispatch<RootState, void, ContactsAction>
+  ThunkDispatch<RootState, void, UnknownAction>
 >;
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

@@ -1,29 +1,26 @@
 import { useEffect } from "react";
 import { ThemeProvider } from "react-bootstrap";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Layout } from "src/components/Layout";
+import { Layout } from "../../components/Layout";
 import {
   ContactListPage,
   GroupPage,
   ContactPage,
   FavoritListPage,
   GroupListPage,
-} from "src/pages";
-import { addMockDataIntoDB } from "src/model/helpers";
-import { useAppDispatch } from "src/redux/hooks";
-import { getDataAction } from "src/redux/actions";
+} from "../../pages";
+import { useAppDispatch } from "../../ducks/hooks";
+import { contactsGroups, contactsList } from "../../ducks/contacts";
 import "./MainApp.scss";
 
 export const MainApp = () => {
-  useEffect(() => {
-    addMockDataIntoDB();
-  }, []);
-
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getDataAction());
-  }, [dispatch]);
+    dispatch(contactsList());
+    dispatch(contactsGroups());
+    console.log("dispatch data");
+  }, []);
 
   return (
     <ThemeProvider

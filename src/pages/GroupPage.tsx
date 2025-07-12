@@ -1,22 +1,22 @@
 import { memo } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { GroupContactsCard } from "src/components/GroupContactsCard";
-import { Empty } from "src/components/Empty";
-import { ContactCard } from "src/components/ContactCard";
-import { useAppSelector } from "src/redux/hooks";
+import { GroupContactsCard } from "../components/GroupContactsCard";
+import { Empty } from "../components/Empty";
+import { ContactCard } from "../components/ContactCard";
+import { useAppSelector } from "../ducks/hooks";
 
 export const GroupPage = memo(() => {
   const { groupId } = useParams<{ groupId: string }>();
   const groupContacts = useAppSelector((state) =>
-    state.contacts.groupContacts.find(({ id }) => id === groupId)
+    state.contacts.groupContacts?.find(({ id }) => id === groupId)
   );
   const contacts = useAppSelector((state) => {
-    const findGroup = state.contacts.groupContacts.find(
+    const findGroup = state.contacts.groupContacts?.find(
       ({ id }) => id === groupId
     );
     if (findGroup) {
-      return state.contacts.contacts.filter(({ id }) =>
+      return state.contacts.contacts?.filter(({ id }) =>
         findGroup.contactIds.includes(id)
       );
     }
@@ -36,7 +36,7 @@ export const GroupPage = memo(() => {
           </Col>
           <Col>
             <Row xxl={4} className="g-4">
-              {contacts.map((contact) => (
+              {contacts?.map((contact) => (
                 <Col key={contact.id}>
                   <ContactCard contact={contact} withLink />
                 </Col>

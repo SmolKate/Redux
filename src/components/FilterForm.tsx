@@ -2,7 +2,7 @@ import { Formik } from "formik";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { memo } from "react";
 import { FormikConfig } from "formik/dist/types";
-import { useAppSelector } from "src/redux/hooks";
+import { useAppSelector } from "../ducks/hooks";
 
 export interface FilterFormValues {
   name: string;
@@ -41,7 +41,7 @@ export const FilterForm = memo<FilterFormProps>(
                   onChange={handleChange}
                 >
                   <option>Open this select menu</option>
-                  {groupContactsList.map((groupContacts) => (
+                  {groupContactsList?.map((groupContacts) => (
                     <option value={groupContacts.id} key={groupContacts.id}>
                       {groupContacts.name}
                     </option>
