@@ -1,34 +1,40 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { ContactCard } from "src/components/ContactCard";
-import { FilterForm, FilterFormValues } from "src/components/FilterForm";
-import { useAppSelector } from "src/redux/hooks";
-import { ContactDto } from "src/types/dto/ContactDto";
+import { ContactCard } from "../components/ContactCard";
+import { FilterForm, FilterFormValues } from "../components/FilterForm";
+import { ContactDto } from "../types/dto/ContactDto";
+import {
+  useGetContactsQuery,
+  useGetContactsGroupsQuery,
+} from "../ducks/contacts";
 
 export const ContactListPage = memo(() => {
-  const contacts = useAppSelector((state) => state.contacts.contacts);
-  const groupContactsList = useAppSelector(
-    (state) => state.contacts.groupContacts
-  );
-  const [contactsList, setContactsList] = useState<ContactDto[]>(contacts);
+  const { data: contacts } = useGetContactsQuery();
+  const { data: groupContactsList } = useGetContactsGroupsQuery();
+
+  const [contactsList, setContactsList] = useState<ContactDto[] | undefined>();
+
+  useEffect(() => {
+    setContactsList(contacts);
+  }, [contacts, setContactsList]);
 
   const onSubmit = (fv: Partial<FilterFormValues>) => {
-    let findContacts: ContactDto[] = contacts;
+    let findContacts: ContactDto[] | undefined = contacts;
 
     if (fv.name) {
       const fvName = fv.name.toLowerCase();
-      findContacts = findContacts.filter(
+      findContacts = findContacts?.filter(
         ({ name }) => name.toLowerCase().indexOf(fvName) > -1
       );
     }
 
     if (fv.groupId) {
-      const groupContacts = groupContactsList.find(
+      const groupContacts = groupContactsList?.find(
         ({ id }) => id === fv.groupId
       );
 
       if (groupContacts) {
-        findContacts = findContacts.filter(({ id }) =>
+        findContacts = findContacts?.filter(({ id }) =>
           groupContacts.contactIds.includes(id)
         );
       }
@@ -43,7 +49,7 @@ export const ContactListPage = memo(() => {
       </Col>
       <Col>
         <Row xxl={4} className="g-4">
-          {contactsList.map((contact) => (
+          {contactsList?.map((contact) => (
             <Col key={contact.id}>
               <ContactCard contact={contact} withLink />
             </Col>
