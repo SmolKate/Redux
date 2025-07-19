@@ -2,11 +2,11 @@ import { Col, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { ContactCard } from "../components/ContactCard";
 import { Empty } from "../components/Empty";
-import { useGetContactsQuery } from "../ducks/contacts";
+import { contactsStore } from "../store/contactsStore";
 
 export const ContactPage = () => {
   const { contactId } = useParams<{ contactId: string }>();
-  const { data: contacts } = useGetContactsQuery();
+  const contacts = contactsStore.contacts;
 
   const contact = contacts?.find(({ id }) => id === contactId);
 

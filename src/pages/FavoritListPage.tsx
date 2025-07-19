@@ -1,11 +1,10 @@
-import { memo } from "react";
 import { Col, Row } from "react-bootstrap";
 import { ContactCard } from "../components/ContactCard";
-import { useGetContactsQuery } from "../ducks/contacts";
+import { contactsStore } from "../store/contactsStore";
+import { observer } from "mobx-react";
 
-export const FavoritListPage = memo(() => {
-  const { data: contacts } = useGetContactsQuery();
-  const favoriteContacts = contacts?.slice(0, 4);
+export const FavoritListPage = observer(() => {
+  const favoriteContacts = contactsStore.favoriteContacts;
 
   return (
     <Row xxl={4} className="g-4">
