@@ -9,8 +9,19 @@ import {
   GroupListPage,
 } from "../../pages";
 import "./MainApp.scss";
+import { useEffect } from "react";
+import { contactsStore } from "src/store/contactsStore";
 
 export const MainApp = () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      await contactsStore.getContacts();
+      await contactsStore.getContactsGroups();
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <ThemeProvider
       breakpoints={["xxxl", "xxl", "xl", "lg", "md", "sm", "xs", "xxs"]}

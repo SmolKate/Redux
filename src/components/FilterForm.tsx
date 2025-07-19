@@ -1,8 +1,8 @@
 import { Formik } from "formik";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
-import { memo } from "react";
 import { FormikConfig } from "formik/dist/types";
-import { useGetContactsGroupsQuery } from "../ducks/contacts";
+import { contactsStore } from "src/store/contactsStore";
+import { observer } from "mobx-react";
 
 export interface FilterFormValues {
   name: string;
@@ -11,9 +11,9 @@ export interface FilterFormValues {
 
 type FilterFormProps = FormikConfig<Partial<FilterFormValues>>;
 
-export const FilterForm = memo<FilterFormProps>(
-  ({ onSubmit, initialValues }) => {
-    const { data: groupContactsList } = useGetContactsGroupsQuery();
+export const FilterForm = observer(
+  ({ onSubmit, initialValues }: FilterFormProps) => {
+    const groupContactsList = contactsStore.groupContactsList;
 
     return (
       <Formik initialValues={initialValues} onSubmit={onSubmit}>

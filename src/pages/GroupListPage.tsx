@@ -1,10 +1,10 @@
-import { memo } from "react";
 import { Col, Row } from "react-bootstrap";
 import { GroupContactsCard } from "../components/GroupContactsCard";
-import { useGetContactsGroupsQuery } from "../ducks/contacts";
+import { contactsStore } from "../store/contactsStore";
+import { observer } from "mobx-react";
 
-export const GroupListPage = memo(() => {
-  const { data: groupContactsList } = useGetContactsGroupsQuery();
+export const GroupListPage = observer(() => {
+  const groupContactsList = contactsStore.groupContactsList;
 
   return (
     <Row xxl={4}>
